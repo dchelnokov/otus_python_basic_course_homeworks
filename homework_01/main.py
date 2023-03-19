@@ -47,12 +47,13 @@ def filter_numbers(int_nums_lst: list, num_type):
     >>> filter_numbers([2, 3, 4, 5], EVEN)
     <<< [2, 4]
     """
-    if num_type == ODD:
-        return list(filter(lambda num: num % 2, int_nums_lst))
-    elif num_type == EVEN:
-        return list(filter(lambda num: not num % 2, int_nums_lst))
-    elif num_type == PRIME:
-        return list(filter(is_prime, int_nums_lst))
+    filter_action = {
+        ODD: lambda num: num % 2,
+        EVEN: lambda num: not num % 2,
+        PRIME: is_prime,
+    }
+    return list(filter(filter_action[num_type], int_nums_lst))
+
 
 
 
