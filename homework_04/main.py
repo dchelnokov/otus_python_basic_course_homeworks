@@ -12,6 +12,24 @@
   (используйте полученные из запроса данные, передайте их в функцию для добавления в БД)
 - закрытие соединения с БД
 """
+import alembic.config
+import asyncio
+def init_db() -> bool:
+    """
+    runs alembic update head to make sure that schema is configured
+    returns: bool True if no exception was thrown, else False
+    """
+    alembicArgs = [
+        '--rauseerr',
+        'upgrade',
+        'head',
+    ]
+    try:
+        alembic.config.main(alembicArgs)
+    except e:
+        print(f"Failed to init the Database with alembic. Error:{e}")
+        return False
+    return True
 
 
 async def async_main():
@@ -19,7 +37,9 @@ async def async_main():
 
 
 def main():
-    pass
+    init_db()   # Prepare the DB Scheme before beginning
+    asyncio.run(async_main())
+
 
 
 if __name__ == "__main__":

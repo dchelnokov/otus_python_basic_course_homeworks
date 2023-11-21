@@ -1,3 +1,9 @@
+##Comments:##
+- DB Name: homework_4, not blog!
+- first we run 'sudo docker compose up pg'
+- before main calls the async main, it prepares the scheme by calling alembic upgrade head
+
+
 ### Домашнее задание "Асинхронная работа с сетью и БД"
 #### Задача:
 - скопируйте папку `homework_04` для этой домашки (Памятка: https://github.com/OtusTeam/BasePython/tree/homeworks-new)
