@@ -1,6 +1,6 @@
 ##Comments:##
 - DB Name: homework_4, not blog!
-- first we run 'sudo docker compose up pg'
+- first we run 'sudo docker compose up -d db'
 - before main calls the async main, it prepares the scheme by calling alembic upgrade head
 
 
