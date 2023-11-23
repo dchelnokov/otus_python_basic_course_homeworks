@@ -1,45 +1,61 @@
 """
-Домашнее задание №4
-Асинхронная работа с сетью и бд
+Home work №4
+Asynchronous work with the Network and DB
 
-доработайте функцию main, по вызову которой будет выполняться полный цикл программы
-(добавьте туда выполнение асинхронной функции async_main):
-- создание таблиц (инициализация)
-- загрузка пользователей и постов
-    - загрузка пользователей и постов должна выполняться конкурентно (параллельно)
-      при помощи asyncio.gather (https://docs.python.org/3/library/asyncio-task.html#running-tasks-concurrently)
-- добавление пользователей и постов в базу данных
-  (используйте полученные из запроса данные, передайте их в функцию для добавления в БД)
-- закрытие соединения с БД
+Extend the main, to execute the full program cycle
+(add the async_main invokation):
+- creating tables (initialisation)
+- load users and posts
+    - the post and users data should be loaded simultaneously
+      with asyncio.gather (https://docs.python.org/3/library/asyncio-task.html#running-tasks-concurrently)
+- add users and posts into the data base
+  (using the data obtained from request relay them to a function to save in the DB)
+- terminate theconnection to the DB
 """
+
 import alembic.config
 import asyncio
-def init_db() -> bool:
+
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+
+from homework_04.config import DB_URL, DB_ECHO
+
+async_engine = create_async_engine(
+    url=DB_URL,
+    echo=DB_ECHO,
+)
+async_session = async_sessionmaker(
+    bind=async_engine,
+    class_=AsyncSession,
+    expire_on_commit=False,
+)
+
+
+async def init_db() -> bool:
     """
     runs alembic update head to make sure that schema is configured
     returns: bool True if no exception was thrown, else False
     """
     alembicArgs = [
-        '--rauseerr',
         'upgrade',
         'head',
     ]
     try:
-        alembic.config.main(alembicArgs)
-    except e:
+        await alembic.config.main(alembicArgs)
+    except Exception as e:
         print(f"Failed to init the Database with alembic. Error:{e}")
         return False
     return True
 
 
 async def async_main():
-    pass
+    with async_session(async_engine) as session:
+        pass
 
 
 def main():
-    init_db()   # Prepare the DB Scheme before beginning
+    asyncio.run(init_db())   # Prepare the DB Scheme before beginning
     asyncio.run(async_main())
-
 
 
 if __name__ == "__main__":

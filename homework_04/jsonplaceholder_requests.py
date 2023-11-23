@@ -4,3 +4,4 @@
 
 USERS_DATA_URL = "https://jsonplaceholder.typicode.com/users"
 POSTS_DATA_URL = "https://jsonplaceholder.typicode.com/posts"
+# {userId: int, id: int, title: str, body: str}
