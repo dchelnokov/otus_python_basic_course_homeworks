@@ -14,9 +14,42 @@ Extend the main, to execute the full program cycle
 """
 
 import alembic.config
-import asyncio
+from sqlalchemy.ext.asyncio import AsyncSession
 
-from models import async_engine, async_session
+from models import async_engine, async_session, User, Post
+
+
+async def add_user(session: AsyncSession, user_data: dict) -> User:
+    """
+    creates a user with data from user_data to db
+    """
+    name = user_data.get('name', 'Unknown')
+    username = user_data.get('username', 'No Data')
+    email = user_data.get('email', 'No Data')
+
+    user = User(name=name, username=username, email=email)
+    session.add(user)
+    await session.commit()
+    return user
+
+
+async def add_post(session: AsyncSession, post_data: dict) -> Post:
+    """
+    creates a post record with data from post_data to the DB
+    """
+    title = post_data.get("title", 'No Data')
+    body = post_data.get("body", 'No Data')
+    user_id = post_data.get("userId", 0)
+
+    post = Post(
+        title=title,
+        body=body,
+        user_id = user_id
+    )
+    session.add(post)
+    await session.commit()
+
+    return post
 
 
 def init_db() -> bool:
