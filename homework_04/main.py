@@ -4,7 +4,7 @@ Asynchronous work with the Network and DB
 
 Extend the main, to execute the full program cycle
 (add the async_main invocation):
-- creating tables (initialisation)
+- creating tables (initialization)
 - load users and posts
     - the post and users data should be loaded simultaneously
       with asyncio.gather (https://docs.python.org/3/library/asyncio-task.html#running-tasks-concurrently)
