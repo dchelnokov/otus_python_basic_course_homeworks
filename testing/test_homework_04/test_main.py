@@ -1,7 +1,5 @@
 import pytest
 
-import homework_04.models
-
 # import homework package and skip the whole test if not available
 homework = pytest.importorskip("homework_04")
 
