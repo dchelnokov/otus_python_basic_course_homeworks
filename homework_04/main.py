@@ -16,8 +16,8 @@ import asyncio
 
 import alembic.config
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
-from models import async_session, User, Post
+
+from homework_04.models import async_session, User, Post
 from jsonplaceholder_requests import fetch_users_data, fetch_posts_data
 
 
