@@ -1,4 +1,4 @@
-from .homework_04 import models, jsonplaceholder_requests, main, config
+from . import models, jsonplaceholder_requests, main, config
 
 __all__ = [
     "models",

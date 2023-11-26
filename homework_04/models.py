@@ -12,7 +12,7 @@ from sqlalchemy.orm import (DeclarativeBase, declared_attr)
 from sqlalchemy.orm import relationship
 from sqlalchemy import (Column, Integer, String, Text, ForeignKey)
 
-from .homework_04.config import DB_URL, DB_ECHO
+from .config import DB_URL, DB_ECHO
 
 PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://postgres:password@localhost/postgres"
 
