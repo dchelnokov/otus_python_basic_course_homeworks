@@ -1,7 +1,7 @@
 ##Comments:##
 - DB Name: homework_4, not blog!
 - first we run 'sudo docker compose up -d db'
-- before main calls the async main, it prepares the scheme by calling alembic upgrade head
+- before main() calls the async main, it prepares the scheme by calling alembic upgrade head
 
 
 ### Домашнее задание "Асинхронная работа с сетью и БД"

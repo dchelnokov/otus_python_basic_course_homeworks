@@ -31,7 +31,7 @@ async def main():
         task_users = tg.create_task(fetch_users_data(), name="get-user-data")
         task_posts = tg.create_task(fetch_posts_data(), name="get-posts-data")
 
-    print("    Users:\n", task_users.result())
+    print(f"    Users:{len(task_users.result())}\n", task_users.result())
     print("\n    Posts:\n", task_posts.result())
 
 

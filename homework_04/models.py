@@ -52,8 +52,8 @@ class User(Base):
 
     posts = relationship(
         "Post",
-        back_populates="user",
-        uselist=True
+        back_populates="users",
+        uselist=False
     )
     def __repr__(self):
         return str(self)
@@ -72,7 +72,7 @@ class Post(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     users = relationship(
         "User",
-        back_populates="post",
+        back_populates="posts",
         uselist=False,
     )
 
