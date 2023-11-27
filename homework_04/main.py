@@ -72,15 +72,15 @@ async def async_main():
 
     async with async_session() as session:
 
-        async with asyncio.TaskGroup() as tg:
-            users_task = tg.create_task(fetch_users_data(), name="getting_users")
-            posts_task = tg.create_task(fetch_posts_data(), name="getting_posts")
-
-        for user_dict in users_task.result():
+        # async with asyncio.TaskGroup() as tg:
+            # users_task = tg.create_task(fetch_users_data(), name="getting_users")
+            # posts_task = tg.create_task(fetch_posts_data(), name="getting_posts")
+        users_task, posts_task = await asyncio.gather(fetch_users_data(), fetch_posts_data())
+        for user_dict in users_task:  #.result():
             user_record = await add_user(session, user_dict)
             print(f"added user {user_record}")
 
-        for post_dict in posts_task.result():
+        for post_dict in posts_task:  #.result():
             await add_post(session, post_dict)
     print("Connection to the database is closed by leaving the context manager.")
 
