@@ -28,7 +28,7 @@ async def add_user(session: AsyncSession, user_data: dict) -> User:
     name = user_data.get("name", "Unknown")
     username = user_data.get("username", "No Data")
     email = user_data.get("email", "No Data")
-    print(f"trying to create a user {name!r} with username {username!r}")
+    # print(f"trying to create a user {name!r} with username {username!r}")
     user = User(name=name, username=username, email=email)
     session.add(user)
     await session.commit()
@@ -78,11 +78,11 @@ async def async_main():
         users_task, posts_task = await asyncio.gather(fetch_users_data(), fetch_posts_data())
         for user_dict in users_task:  #.result():
             user_record = await add_user(session, user_dict)
-            print(f"added user {user_record}")
+            # print(f"added user {user_record}")
 
         for post_dict in posts_task:  #.result():
             await add_post(session, post_dict)
-    print("Connection to the database is closed by leaving the context manager.")
+    # print("Connection to the database is closed by leaving the context manager.")
 
 
 def main():
