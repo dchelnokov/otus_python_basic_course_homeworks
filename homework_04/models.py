@@ -18,7 +18,7 @@ PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://
 
 
 async_engine = create_async_engine(
-    url=DB_URL,
+    url=PG_CONN_URI,
     echo=DB_ECHO,
 )
 async_session = async_sessionmaker(

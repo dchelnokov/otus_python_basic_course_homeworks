@@ -28,7 +28,7 @@ async def add_user(session: AsyncSession, user_data: dict) -> User:
     name = user_data.get("name", "Unknown")
     username = user_data.get("username", "No Data")
     email = user_data.get("email", "No Data")
-    # print(f"trying to create a user {name!r} with username {username!r}")
+
     user = User(name=name, username=username, email=email)
     session.add(user)
     await session.commit()
@@ -52,7 +52,7 @@ async def add_post(session: AsyncSession, post_data: dict) -> Post:
 
 def init_db() -> bool:
     """
-    runs alembic update head to make sure that schema is configured
+    runs 'alembic update head' to make sure that schema is configured
     returns: bool True if no exception was thrown, else False
     """
     alembic_args = [
@@ -72,17 +72,12 @@ async def async_main():
 
     async with async_session() as session:
 
-        # async with asyncio.TaskGroup() as tg:
-            # users_task = tg.create_task(fetch_users_data(), name="getting_users")
-            # posts_task = tg.create_task(fetch_posts_data(), name="getting_posts")
         users_task, posts_task = await asyncio.gather(fetch_users_data(), fetch_posts_data())
-        for user_dict in users_task:  #.result():
-            user_record = await add_user(session, user_dict)
-            # print(f"added user {user_record}")
+        for user_dict in users_task:
+            await add_user(session, user_dict)
 
-        for post_dict in posts_task:  #.result():
+        for post_dict in posts_task:
             await add_post(session, post_dict)
-    # print("Connection to the database is closed by leaving the context manager.")
 
 
 def main():

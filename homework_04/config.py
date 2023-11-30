@@ -5,5 +5,5 @@ BASE_DIR = Path(__file__).parent
 
 DB_URL = "postgresql+asyncpg://user:example@localhost:5432/homework_4"
 DB_ECHO = False
-# DB_ECHO = True
+
 

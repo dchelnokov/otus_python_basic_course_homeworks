@@ -12,8 +12,7 @@ import sys
 
 # print(f"How about this?: {os.path.join(os.path.dirname(__file__))}")
 # sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from models import Base, DB_URL
-
+from homework_04.models import Base, PG_CONN_URI
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -31,7 +30,7 @@ if config.config_file_name is not None:
 
 target_metadata = Base.metadata
 
-config.set_main_option(name="sqlalchemy.url", value=DB_URL)
+config.set_main_option(name="sqlalchemy.url", value=PG_CONN_URI)
 
 
 # other values from the config, defined by the needs of env.py,
