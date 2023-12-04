@@ -8,13 +8,16 @@
 
 import os
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
-from sqlalchemy.orm import (DeclarativeBase, declared_attr)
+from sqlalchemy.orm import DeclarativeBase, declared_attr
 from sqlalchemy.orm import relationship
-from sqlalchemy import (Column, Integer, String, Text, ForeignKey)
+from sqlalchemy import Column, Integer, String, Text, ForeignKey
 
 from homework_04.config import DB_URL, DB_ECHO
 
-PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://postgres:password@localhost/postgres"
+PG_CONN_URI = (
+    os.environ.get("SQLALCHEMY_PG_CONN_URI")
+    or DB_URL or "postgresql+asyncpg://postgres:password@localhost/postgres"
+)
 
 
 async_engine = create_async_engine(
@@ -30,7 +33,6 @@ Session = async_session
 
 
 class Base(DeclarativeBase):
-
     @declared_attr.directive
     def __tablename__(cls) -> str:
         return f"{cls.__name__.lower()}s"
@@ -44,17 +46,15 @@ class Base(DeclarativeBase):
 #   email
 # Create relationship with post
 
-class User(Base):
 
+class User(Base):
     username = Column(String(80), nullable=False, unique=True)
-    name = Column(String(50), nullable= False, unique=False)
+    name = Column(String(50), nullable=False, unique=False)
     email = Column(String(120), nullable=False, unique=True)
 
-    posts = relationship(
-        "Post",
-        back_populates="users",
-        uselist=False
-    )
+    posts = relationship("Post", back_populates="users", uselist=True)
+    post = relationship("Post", back_populates="users", uselist=False)
+
     def __repr__(self):
         return str(self)
 
@@ -66,11 +66,15 @@ class User(Base):
 
 
 class Post(Base):
-
     title = Column(String(120), nullable=False, unique=False)
     body = Column(Text(), nullable=False, unique=False)
     user_id = Column(Integer, ForeignKey("users.id"))
     users = relationship(
+        "User",
+        back_populates="posts",
+        uselist=False,
+    )
+    user = relationship(
         "User",
         back_populates="posts",
         uselist=False,
@@ -84,6 +88,3 @@ class Post(Base):
             f"{self.__class__.__name__}(id={self.id}, "
             f"title={self.title!r}, user_id={self.user_id!r}"
         )
-
-
-
