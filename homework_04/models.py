@@ -70,6 +70,7 @@ class Post(Base):
     title = Column(String(120), nullable=False, unique=False)
     body = Column(Text(), nullable=False, unique=False)
     user_id = Column(Integer, ForeignKey("users.id"))
+
     users = relationship(
         "User",
         back_populates="posts",
