@@ -17,9 +17,9 @@ import asyncio
 import alembic.config
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from homework_04.models import async_session, User, Post
+from homework_04.models import async_session, User, Post, PG_CONN_URI
 from homework_04.jsonplaceholder_requests import fetch_users_data, fetch_posts_data
-
+from init_db import migrate_db
 
 async def add_user(session: AsyncSession, user_data: dict) -> User:
     """
@@ -50,29 +50,30 @@ async def add_post(session: AsyncSession, post_data: dict) -> Post:
     return post
 
 
-def init_db() -> bool:
-    """
-    runs 'alembic update head' to make sure that schema is configured
-    returns: bool True if no exception was thrown, else False
-    """
-    alembic_args = [
-        "upgrade",
-        "head",
-    ]
-    try:
-        alembic.config.main(alembic_args)
-    except Exception as e:
-        print(f"Failed to init the Database with alembic. Error:{e}")
-        return False
-
-    return True
+# def init_db() -> bool:
+#     """
+#     runs 'alembic update head' to make sure that schema is configured
+#     returns: bool True if no exception was thrown, else False
+#     """
+#     alembic_args = [
+#         "upgrade",
+#         "head",
+#     ]
+#     try:
+#         alembic.config.main(alembic_args)
+#     except Exception as e:
+#         print(f"Failed to init the Database with alembic. Error:{e}")
+#         return False
+#
+#     return True
 
 
 async def async_main():
-
+    await migrate_db(PG_CONN_URI)  # Prepare the DB Scheme before beginning
     async with async_session() as session:
-
-        users_task, posts_task = await asyncio.gather(fetch_users_data(), fetch_posts_data())
+        users_task, posts_task = await asyncio.gather(
+            fetch_users_data(), fetch_posts_data()
+        )
         for user_dict in users_task:
             await add_user(session, user_dict)
 
@@ -81,7 +82,6 @@ async def async_main():
 
 
 def main():
-    init_db()  # Prepare the DB Scheme before beginning
     asyncio.run(async_main())
 
 
